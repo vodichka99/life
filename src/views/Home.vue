@@ -8,11 +8,9 @@
             v-for="colNum in columns"
             :key="colNum"
             :class="{
-              alive: cages.find(
-                (item) => item.row == rowNum && item.col == colNum
-              )?.alive,
+              alive: cages[colNum - 1 + columns * (rowNum - 1)]?.alive,
             }"
-            @click="reviveCage({ row: rowNum, col: colNum })"
+            @click="reviveCage(cages[colNum - 1 + columns * (rowNum - 1)])"
           ></div>
         </div>
       </div>
@@ -33,8 +31,8 @@ export default {
   name: "Home",
   data() {
     return {
-      rows: 20,
-      columns: 20,
+      rows: 30,
+      columns: 30,
       cages: [],
       started: false,
       intervalDelay: 100,
@@ -48,9 +46,9 @@ export default {
           return item.row == params.row && item.col == params.col;
         });
       };
-      find(cage).alive = true;
+      const aliveCage = find(cage)
+      aliveCage.alive = true;
       this.update();
-      console.log(find(cage));
     },
     update() {
       this.cages.forEach((cage) => {
@@ -72,11 +70,15 @@ export default {
       });
     },
     tick() {
+      let aliveCages = 0
       this.cages.forEach((cage) => {
-        if (cage.willLive) cage.alive = true;
+        if (cage.willLive) {
+          cage.alive = true
+          aliveCages += 1
+        }
         else cage.alive = false;
       });
-      if(!this.cages.find(cage => cage.alive)) this.stop()
+      if(!aliveCages) this.stop()
       this.update();
     },
     start() {
@@ -126,7 +128,6 @@ export default {
       });
       cage.around = around;
     });
-    console.log(this.cages);
   },
 };
 </script>
