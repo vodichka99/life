@@ -41,13 +41,7 @@ export default {
   },
   methods: {
     reviveCage(cage) {
-      const find = (params) => {
-        return this.cages.find((item) => {
-          return item.row == params.row && item.col == params.col;
-        });
-      };
-      const aliveCage = find(cage)
-      aliveCage.alive = true;
+      cage.alive = true;
       this.update();
     },
     update() {
