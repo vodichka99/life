@@ -93,24 +93,24 @@ export default {
       const rowIndex = cage.row - 1;
       const colIndex = cage.col - 1;
 
-      let leftTop =
-        colIndex ? this.rows * (rowIndex - 1) + colIndex - 1 : -1;
-      let top = rowIndex ? this.rows * (rowIndex - 1) + colIndex : -1;
-      let rightTop =
-        colIndex != this.columns - 1
-          ? this.rows * (rowIndex - 1) + colIndex + 1
-          : -1;
-      let left = colIndex ? this.rows * rowIndex + colIndex - 1 : -1;
-      let right =
-        colIndex != this.columns - 1 ? this.rows * rowIndex + colIndex + 1 : -1;
-      let leftBottom =
-        colIndex ? this.rows * (rowIndex + 1) + colIndex - 1 : -1;
-      let bottom =
-        rowIndex != this.rows - 1 ? this.rows * (rowIndex + 1) + colIndex : -1;
-      let rightBottom =
-        colIndex != this.columns - 1
-          ? this.rows * (rowIndex + 1) + colIndex + 1
-          : -1;
+      let topRow = rowIndex
+        ? this.rows * (rowIndex - 1)
+        : this.rows * (this.rows - 1);
+      let centerRow = this.rows * rowIndex;
+      let bottomRow =
+        rowIndex !== this.rows - 1 ? this.rows * (rowIndex + 1) : 0;
+      let leftColumn = colIndex ? colIndex - 1 : this.columns - 1;
+      let centerColumn = colIndex;
+      let rightColumn = colIndex !== this.columns - 1 ? colIndex + 1 : 0;
+
+      let leftTop = topRow + leftColumn;
+      let top = topRow + centerColumn;
+      let rightTop = topRow + rightColumn;
+      let left = centerRow + leftColumn;
+      let right = centerRow + rightColumn;
+      let leftBottom = bottomRow + leftColumn;
+      let bottom = bottomRow + centerColumn;
+      let rightBottom = bottomRow + rightColumn;
       const aroundCages = [
         leftTop,
         top,
