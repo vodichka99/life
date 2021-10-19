@@ -18,9 +18,7 @@
         <button class="play pointer" @click="start" :disabled="started">
           Play
         </button>
-        <button class="play pointer" @click="stop">
-          Stop
-        </button>
+        <button class="play pointer" @click="stop">Stop</button>
       </div>
     </div>
   </div>
@@ -64,15 +62,14 @@ export default {
       });
     },
     tick() {
-      let aliveCages = 0
+      let aliveCages = 0;
       this.cages.forEach((cage) => {
         if (cage.willLive) {
-          cage.alive = true
-          aliveCages += 1
-        }
-        else cage.alive = false;
+          cage.alive = true;
+          aliveCages += 1;
+        } else cage.alive = false;
       });
-      if(!aliveCages) this.stop()
+      if (!aliveCages) this.stop();
       this.update();
     },
     start() {
@@ -87,25 +84,33 @@ export default {
     },
   },
   mounted() {
-    const find = (params) => {
-      return this.cages.find((item) => {
-        return item.row == params.row && item.col == params.col;
-      });
-    };
     for (let i = 1; i <= this.rows; i++) {
       for (let i1 = 1; i1 <= this.columns; i1++) {
         this.cages.push({ row: i, col: i1, alive: false, willLive: false });
       }
     }
     this.cages.forEach((cage) => {
-      let leftTop = find({ row: cage.row - 1, col: cage.col - 1 });
-      let top = find({ row: cage.row - 1, col: cage.col });
-      let rightTop = find({ row: cage.row - 1, col: cage.col + 1 });
-      let left = find({ row: cage.row, col: cage.col - 1 });
-      let right = find({ row: cage.row, col: cage.col + 1 });
-      let leftBottom = find({ row: cage.row + 1, col: cage.col - 1 });
-      let bottom = find({ row: cage.row + 1, col: cage.col });
-      let rightBottom = find({ row: cage.row + 1, col: cage.col + 1 });
+      const rowIndex = cage.row - 1;
+      const colIndex = cage.col - 1;
+
+      let leftTop =
+        colIndex ? this.rows * (rowIndex - 1) + colIndex - 1 : -1;
+      let top = rowIndex ? this.rows * (rowIndex - 1) + colIndex : -1;
+      let rightTop =
+        colIndex != this.columns - 1
+          ? this.rows * (rowIndex - 1) + colIndex + 1
+          : -1;
+      let left = colIndex ? this.rows * rowIndex + colIndex - 1 : -1;
+      let right =
+        colIndex != this.columns - 1 ? this.rows * rowIndex + colIndex + 1 : -1;
+      let leftBottom =
+        colIndex ? this.rows * (rowIndex + 1) + colIndex - 1 : -1;
+      let bottom =
+        rowIndex != this.rows - 1 ? this.rows * (rowIndex + 1) + colIndex : -1;
+      let rightBottom =
+        colIndex != this.columns - 1
+          ? this.rows * (rowIndex + 1) + colIndex + 1
+          : -1;
       const aroundCages = [
         leftTop,
         top,
@@ -118,7 +123,7 @@ export default {
       ];
       const around = [];
       aroundCages.forEach((item) => {
-        if (item) around.push(this.cages.indexOf(item));
+        if (item >= 0 && item <= this.cages.length - 1) around.push(item);
       });
       cage.around = around;
     });
