@@ -121,11 +121,7 @@ export default {
         bottom,
         rightBottom,
       ];
-      const around = [];
-      aroundCages.forEach((item) => {
-        if (item >= 0 && item <= this.cages.length - 1) around.push(item);
-      });
-      cage.around = around;
+      cage.around = aroundCages;
     });
   },
 };
